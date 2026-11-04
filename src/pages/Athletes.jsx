@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { INITIAL_ATHLETES, PHYSICAL, SEXES, ageFrom, calcImc, imcCategory } from '../data/athletes'
+import { INITIAL_ATHLETES, SEXES, ageFrom, calcImc, imcCategory } from '../data/athletes'
 import Icon from '../components/Icon'
 
 // Los datos viven solo en la sesión (sessionStorage): se pierden al cerrar la pestaña.
@@ -14,7 +14,7 @@ function load() {
   }
 }
 
-const EMPTY = { nombre: '', nacimiento: '', sexo: '', resistencia: '', velocidad: '', fuerza: '', peso: '', estatura: '' }
+const EMPTY = { nombre: '', nacimiento: '', sexo: '', peso: '', estatura: '' }
 
 function initials(name) {
   return name.split(' ').slice(0, 2).map((p) => p[0]).join('').toUpperCase()
@@ -26,10 +26,6 @@ function validate(f) {
   if (!f.nacimiento) e.nacimiento = 'Requerido'
   else if (new Date(f.nacimiento) > new Date()) e.nacimiento = 'Fecha inválida'
   if (!f.sexo) e.sexo = 'Requerido'
-  for (const { key } of PHYSICAL) {
-    const v = Number(f[key])
-    if (f[key] === '' || v < 0 || v > 100) e[key] = '0 a 100'
-  }
   if (!(Number(f.peso) > 0)) e.peso = 'Requerido'
   if (!(Number(f.estatura) > 0)) e.estatura = 'Requerido'
   return e
@@ -55,9 +51,6 @@ function AthleteForm({ athlete, onSave, onClose }) {
     onSave({
       ...form,
       nombre: form.nombre.trim(),
-      resistencia: Number(form.resistencia),
-      velocidad: Number(form.velocidad),
-      fuerza: Number(form.fuerza),
       peso: Number(form.peso),
       estatura: Number(form.estatura),
     })
@@ -89,13 +82,6 @@ function AthleteForm({ athlete, onSave, onClose }) {
               </select>
               {errors.sexo && <span className="field-error">{errors.sexo}</span>}
             </label>
-          </div>
-        </fieldset>
-
-        <fieldset>
-          <legend>Indicadores físicos (0 a 100)</legend>
-          <div className="form-grid cols-3">
-            {PHYSICAL.map((p) => field(p.key, p.label, { type: 'number', min: 0, max: 100 }))}
           </div>
         </fieldset>
 
@@ -153,7 +139,7 @@ export default function Athletes() {
         <div>
           <p className="eyebrow">Módulo</p>
           <h1>Deportistas</h1>
-          <p className="muted">Alta y seguimiento de indicadores físicos y antropométricos.</p>
+          <p className="muted">Alta y seguimiento de indicadores antropométricos.</p>
         </div>
         <button className="btn-primary btn-sm" onClick={() => setEditing({})}>
           <Icon name="plus" size={16} /> Nuevo deportista
@@ -168,9 +154,6 @@ export default function Athletes() {
                 <th>Nombre</th>
                 <th>Nacimiento</th>
                 <th>Sexo</th>
-                <th>Resistencia</th>
-                <th>Velocidad</th>
-                <th>Fuerza</th>
                 <th>Peso</th>
                 <th>Estatura</th>
                 <th>IMC</th>
@@ -190,9 +173,6 @@ export default function Athletes() {
                     </td>
                     <td className="muted nowrap">{a.nacimiento} · {ageFrom(a.nacimiento)} años</td>
                     <td>{a.sexo}</td>
-                    <td className="mono">{a.resistencia}</td>
-                    <td className="mono">{a.velocidad}</td>
-                    <td className="mono">{a.fuerza}</td>
                     <td className="nowrap">{a.peso} kg</td>
                     <td className="nowrap">{a.estatura} cm</td>
                     <td className="nowrap"><strong>{imc}</strong> <span className="tag">{imcCategory(imc)}</span></td>
@@ -205,7 +185,7 @@ export default function Athletes() {
                 )
               })}
               {athletes.length === 0 && (
-                <tr><td colSpan={10} className="empty">Aún no hay deportistas registrados.</td></tr>
+                <tr><td colSpan={7} className="empty">Aún no hay deportistas registrados.</td></tr>
               )}
             </tbody>
           </table>

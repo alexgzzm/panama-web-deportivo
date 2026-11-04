@@ -147,8 +147,6 @@ export default function Users() {
     return () => clearTimeout(t)
   }, [toast])
 
-  const athleteName = (id) => athletes.find((a) => a.id === id)?.nombre
-
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase()
     return users.filter(
@@ -221,7 +219,6 @@ export default function Users() {
                 <th>Usuario</th>
                 <th>Email</th>
                 <th>Rol</th>
-                <th>Deportista</th>
                 <th>Teléfono</th>
                 <th>Estado</th>
                 <th>Último acceso</th>
@@ -240,7 +237,6 @@ export default function Users() {
                   <td className="mono">@{u.username}</td>
                   <td className="muted">{u.email}</td>
                   <td><span className="tag">{u.role}</span></td>
-                  <td className="muted">{u.role === ROLE_DEPORTISTA ? athleteName(u.athleteId) || 'Sin asignar' : '—'}</td>
                   <td className="muted nowrap">{u.phone}</td>
                   <td><span className={`badge ${STATUS_CLASS[u.status]}`}>{u.status}</span></td>
                   <td className="muted nowrap">{formatAccess(u.lastAccess)}</td>
@@ -253,7 +249,7 @@ export default function Users() {
               ))}
               {filtered.length === 0 && (
                 <tr>
-                  <td colSpan={9} className="empty">No se encontraron usuarios con esos filtros.</td>
+                  <td colSpan={8} className="empty">No se encontraron usuarios con esos filtros.</td>
                 </tr>
               )}
             </tbody>

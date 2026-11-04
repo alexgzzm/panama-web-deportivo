@@ -1,5 +1,8 @@
 // Datos ficticios para el demo.
-export const ROLES = ['Administrador', 'Socio']
+export const ROLES = ['Administrador', 'Socio', 'Deportista']
+
+// Solo los usuarios con este rol pueden vincularse a un deportista.
+export const ROLE_DEPORTISTA = 'Deportista'
 
 export const USERS = [
   { id: 1, username: 'mrodriguez', name: 'María Rodríguez', email: 'maria.rodriguez@deportivo.com', role: 'Administrador', phone: '+507 6612-3344', status: 'Activo', lastAccess: '2026-10-20T09:12:00' },
@@ -14,4 +17,5 @@ export const USERS = [
   { id: 10, username: 'ejaen', name: 'Eduardo Jaén', email: 'eduardo.jaen@outlook.com', role: 'Socio', phone: '+507 6019-5527', status: 'Activo', lastAccess: '2026-10-16T18:10:00' },
   { id: 11, username: 'pcedeno', name: 'Patricia Cedeño', email: 'patricia.cedeno@deportivo.com', role: 'Administrador', phone: '+507 6744-0093', status: 'Activo', lastAccess: '2026-10-19T12:34:00' },
   { id: 12, username: 'opinilla', name: 'Óscar Pinilla', email: 'oscar.pinilla@gmail.com', role: 'Socio', phone: '+507 6366-2148', status: 'Inactivo', lastAccess: '2026-06-21T09:50:00' },
+  { id: 13, username: 'cmendoza', name: 'Carlos Mendoza', email: 'carlos.mendoza@gmail.com', role: 'Deportista', phone: '+507 6612-4501', status: 'Activo', lastAccess: '2026-10-19T18:00:00', athleteId: 1 },
 ]

@@ -33,6 +33,18 @@ export function ageFrom(birth) {
   return age
 }
 
+// Los datos viven solo en la sesión (sessionStorage): se pierden al cerrar la pestaña.
+export const ATHLETES_KEY = 'deportivo.athletes'
+
+export function loadAthletes() {
+  try {
+    const raw = sessionStorage.getItem(ATHLETES_KEY)
+    return raw ? JSON.parse(raw) : INITIAL_ATHLETES
+  } catch {
+    return INITIAL_ATHLETES
+  }
+}
+
 export const INITIAL_ATHLETES = [
   { id: 1, nombre: 'Carlos Mendoza', nacimiento: '2001-03-14', sexo: 'Masculino', telefono: '+507 6612-4501', email: 'carlos.mendoza@gmail.com', emergenciaNombre: 'Rosa Mendoza', emergenciaParentesco: 'Madre', emergenciaTelefono: '+507 6700-1122', deporte: 'Fútbol', categoria: 'Sub-20', equipo: 'Tiburones', posicion: 'Delantero', entrenador: 'Luis Sánchez', inscripcion: 'Inscrito', peso: 74, estatura: 178 },
   { id: 2, nombre: 'Laura Pérez', nacimiento: '1999-11-02', sexo: 'Femenino', telefono: '+507 6230-8845', email: 'laura.perez@hotmail.com', emergenciaNombre: 'Jorge Pérez', emergenciaParentesco: 'Padre', emergenciaTelefono: '+507 6455-9023', deporte: 'Voleibol', categoria: 'Libre', equipo: 'Halcones', posicion: 'Central', entrenador: 'Gabriela Delgado', inscripcion: 'Inscrito', peso: 58, estatura: 165 },

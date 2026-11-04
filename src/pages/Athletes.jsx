@@ -1,23 +1,13 @@
 import { useEffect, useState } from 'react'
 import {
   CATEGORIAS, DEPORTES, ENTRENADORES, EQUIPOS, ESTADOS_INSCRIPCION, PARENTESCOS,
-  INITIAL_ATHLETES, SEXES, ageFrom, calcImc, imcCategory,
+  ATHLETES_KEY, SEXES, ageFrom, calcImc, imcCategory, loadAthletes,
 } from '../data/athletes'
 import Icon from '../components/Icon'
 
-// Los datos viven solo en la sesión (sessionStorage): se pierden al cerrar la pestaña.
-const KEY = 'deportivo.athletes'
+const KEY = ATHLETES_KEY
 
 const INSCRIPCION_CLASS = { Inscrito: 'ok', Pendiente: 'warn', Suspendido: 'off', Retirado: 'off' }
-
-function load() {
-  try {
-    const raw = sessionStorage.getItem(KEY)
-    return raw ? JSON.parse(raw) : INITIAL_ATHLETES
-  } catch {
-    return INITIAL_ATHLETES
-  }
-}
 
 const EMPTY = { nombre: '', nacimiento: '', sexo: '',
   telefono: '', email: '', emergenciaNombre: '', emergenciaParentesco: '', emergenciaTelefono: '',
@@ -158,7 +148,7 @@ function AthleteForm({ athlete, onSave, onClose }) {
 }
 
 export default function Athletes() {
-  const [athletes, setAthletes] = useState(load)
+  const [athletes, setAthletes] = useState(loadAthletes)
   const [editing, setEditing] = useState(null) // null = cerrado, {} = nuevo, objeto = editar
   const [toast, setToast] = useState('')
 

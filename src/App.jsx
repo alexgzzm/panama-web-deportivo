@@ -4,6 +4,7 @@ import Layout from './components/Layout'
 import Login from './pages/Login'
 import Home from './pages/Home'
 import Users from './pages/Users'
+import Athletes from './pages/Athletes'
 
 function Protected({ children }) {
   const { user } = useAuth()
@@ -22,6 +23,7 @@ export default function App() {
       <Route element={<Protected><Layout /></Protected>}>
         <Route path="/" element={<Home />} />
         <Route path="/usuarios" element={<Users />} />
+        <Route path="/deportistas" element={<Athletes />} />
       </Route>
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>

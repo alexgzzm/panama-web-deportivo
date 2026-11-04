@@ -36,8 +36,6 @@ export default function Users() {
   const stats = [
     { label: 'Total', value: USERS.length },
     { label: 'Activos', value: USERS.filter((u) => u.status === 'Activo').length },
-    { label: 'Personal', value: USERS.filter((u) => u.role !== 'Socio').length },
-    { label: 'Socios', value: USERS.filter((u) => u.role === 'Socio').length },
   ]
 
   // Los formularios de crear/editar no forman parte del demo.

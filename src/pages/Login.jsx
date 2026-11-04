@@ -65,8 +65,6 @@ export default function Login() {
             <p>{CLUB_TAGLINE}</p>
           </div>
           <ul className="hero-stats">
-            <li><strong>1,200+</strong><span>Socios activos</span></li>
-            <li><strong>14</strong><span>Canchas</span></li>
             <li><strong>8</strong><span>Disciplinas</span></li>
           </ul>
         </div>

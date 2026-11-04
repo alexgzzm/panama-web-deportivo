@@ -1,9 +1,14 @@
 import { useEffect, useState } from 'react'
-import { INITIAL_ATHLETES, SEXES, ageFrom, calcImc, imcCategory } from '../data/athletes'
+import {
+  CATEGORIAS, DEPORTES, ENTRENADORES, EQUIPOS, ESTADOS_INSCRIPCION, PARENTESCOS,
+  INITIAL_ATHLETES, SEXES, ageFrom, calcImc, imcCategory,
+} from '../data/athletes'
 import Icon from '../components/Icon'
 
 // Los datos viven solo en la sesión (sessionStorage): se pierden al cerrar la pestaña.
 const KEY = 'deportivo.athletes'
+
+const INSCRIPCION_CLASS = { Inscrito: 'ok', Pendiente: 'warn', Suspendido: 'off', Retirado: 'off' }
 
 function load() {
   try {
@@ -14,7 +19,11 @@ function load() {
   }
 }
 
-const EMPTY = { nombre: '', nacimiento: '', sexo: '', peso: '', estatura: '' }
+const EMPTY = { nombre: '', nacimiento: '', sexo: '',
+  telefono: '', email: '', emergenciaNombre: '', emergenciaParentesco: '', emergenciaTelefono: '',
+  deporte: '', categoria: '', equipo: '', posicion: '', entrenador: '', inscripcion: '',
+  peso: '', estatura: '',
+}
 
 function initials(name) {
   return name.split(' ').slice(0, 2).map((p) => p[0]).join('').toUpperCase()
@@ -26,6 +35,14 @@ function validate(f) {
   if (!f.nacimiento) e.nacimiento = 'Requerido'
   else if (new Date(f.nacimiento) > new Date()) e.nacimiento = 'Fecha inválida'
   if (!f.sexo) e.sexo = 'Requerido'
+  if (!f.telefono.trim()) e.telefono = 'Requerido'
+  if (f.email.trim() && !/^\S+@\S+\.\S+$/.test(f.email.trim())) e.email = 'Correo inválido'
+  if (!f.emergenciaNombre.trim()) e.emergenciaNombre = 'Requerido'
+  if (!f.emergenciaParentesco) e.emergenciaParentesco = 'Requerido'
+  if (!f.emergenciaTelefono.trim()) e.emergenciaTelefono = 'Requerido'
+  if (!f.deporte) e.deporte = 'Requerido'
+  if (!f.categoria) e.categoria = 'Requerido'
+  if (!f.inscripcion) e.inscripcion = 'Requerido'
   if (!(Number(f.peso) > 0)) e.peso = 'Requerido'
   if (!(Number(f.estatura) > 0)) e.estatura = 'Requerido'
   return e
@@ -64,6 +81,17 @@ function AthleteForm({ athlete, onSave, onClose }) {
     </label>
   )
 
+  const select = (k, label, options) => (
+    <label className="field">
+      {label}
+      <select value={form[k]} onChange={set(k)}>
+        <option value="">Seleccionar</option>
+        {options.map((o) => <option key={o}>{o}</option>)}
+      </select>
+      {errors[k] && <span className="field-error">{errors[k]}</span>}
+    </label>
+  )
+
   return (
     <div className="modal-backdrop" onMouseDown={(e) => e.target === e.currentTarget && onClose()}>
       <form className="modal" onSubmit={submit} noValidate role="dialog" aria-modal="true">
@@ -74,14 +102,36 @@ function AthleteForm({ athlete, onSave, onClose }) {
           <div className="form-grid">
             <div className="span-2">{field('nombre', 'Nombre completo', { type: 'text', autoFocus: true })}</div>
             {field('nacimiento', 'Fecha de nacimiento', { type: 'date' })}
-            <label className="field">
-              Sexo
-              <select value={form.sexo} onChange={set('sexo')}>
-                <option value="">Seleccionar</option>
-                {SEXES.map((s) => <option key={s}>{s}</option>)}
-              </select>
-              {errors.sexo && <span className="field-error">{errors.sexo}</span>}
-            </label>
+            {select('sexo', 'Sexo', SEXES)}
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Información de contacto</legend>
+          <div className="form-grid">
+            {field('telefono', 'Teléfono', { type: 'tel' })}
+            {field('email', 'Correo electrónico', { type: 'email' })}
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Contacto de emergencia</legend>
+          <div className="form-grid">
+            <div className="span-2">{field('emergenciaNombre', 'Nombre completo', { type: 'text' })}</div>
+            {select('emergenciaParentesco', 'Parentesco', PARENTESCOS)}
+            {field('emergenciaTelefono', 'Teléfono', { type: 'tel' })}
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Información deportiva</legend>
+          <div className="form-grid">
+            {select('deporte', 'Deporte practicado', DEPORTES)}
+            {select('categoria', 'Categoría', CATEGORIAS)}
+            {select('equipo', 'Equipo asignado', EQUIPOS)}
+            {field('posicion', 'Posición de juego', { type: 'text' })}
+            {select('entrenador', 'Entrenador asignado', ENTRENADORES)}
+            {select('inscripcion', 'Estado de inscripción', ESTADOS_INSCRIPCION)}
           </div>
         </fieldset>
 
@@ -154,6 +204,10 @@ export default function Athletes() {
                 <th>Nombre</th>
                 <th>Nacimiento</th>
                 <th>Sexo</th>
+                <th>Teléfono</th>
+                <th>Deporte</th>
+                <th>Equipo</th>
+                <th>Inscripción</th>
                 <th>Peso</th>
                 <th>Estatura</th>
                 <th>IMC</th>
@@ -173,6 +227,10 @@ export default function Athletes() {
                     </td>
                     <td className="muted nowrap">{a.nacimiento} · {ageFrom(a.nacimiento)} años</td>
                     <td>{a.sexo}</td>
+                    <td className="muted nowrap">{a.telefono || '—'}</td>
+                    <td>{a.deporte || '—'}</td>
+                    <td>{a.equipo || '—'}</td>
+                    <td>{a.inscripcion ? <span className={`badge ${INSCRIPCION_CLASS[a.inscripcion]}`}>{a.inscripcion}</span> : '—'}</td>
                     <td className="nowrap">{a.peso} kg</td>
                     <td className="nowrap">{a.estatura} cm</td>
                     <td className="nowrap"><strong>{imc}</strong> <span className="tag">{imcCategory(imc)}</span></td>
@@ -185,7 +243,7 @@ export default function Athletes() {
                 )
               })}
               {athletes.length === 0 && (
-                <tr><td colSpan={7} className="empty">Aún no hay deportistas registrados.</td></tr>
+                <tr><td colSpan={11} className="empty">Aún no hay deportistas registrados.</td></tr>
               )}
             </tbody>
           </table>

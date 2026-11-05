@@ -6,17 +6,9 @@ import Home from './pages/Home'
 import Users from './pages/Users'
 import Athletes from './pages/Athletes'
 import SportsDevelopment, { SubModulePage } from './pages/SportsDevelopment'
-import InitialTests from './pages/InitialTests'
 import { MODULES } from './modules'
 
 const DEVELOPMENT = MODULES.find((m) => m.key === 'desarrollo')
-
-// Submódulos ya implementados; el resto muestra la página "próximamente".
-const SUBMODULE_PAGES = { 'pruebas-iniciales': InitialTests }
-function Page(props) {
-  const Component = SUBMODULE_PAGES[props.sub.key] ?? SubModulePage
-  return <Component {...props} />
-}
 
 function Protected({ children }) {
   const { user } = useAuth()
@@ -38,7 +30,7 @@ export default function App() {
         <Route path="/deportistas" element={<Athletes />} />
         <Route path={DEVELOPMENT.path} element={<SportsDevelopment module={DEVELOPMENT} />} />
         {DEVELOPMENT.children.map((c) => (
-          <Route key={c.key} path={c.path} element={<Page parent={DEVELOPMENT} sub={c} />} />
+          <Route key={c.key} path={c.path} element={<SubModulePage parent={DEVELOPMENT} sub={c} />} />
         ))}
       </Route>
       <Route path="*" element={<Navigate to="/" replace />} />

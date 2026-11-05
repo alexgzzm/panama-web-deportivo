@@ -285,9 +285,9 @@ h1, h2, p { margin: 0; }
 .nav-group { display: flex; flex-direction: column; gap: 2px; }
 .nav-sub { display: flex; flex-direction: column; gap: 2px; margin: 2px 0 4px 20px; padding-left: 10px; border-left: 1px solid var(--line); }
 .nav-subitem { padding: 7px 10px; font-size: 0.85rem; }
-.breadcrumb { font-size: 0.85rem; color: var(--ink-2); margin-bottom: 4px; }
-.breadcrumb a { color: var(--accent-strong); text-decoration: none; }
-.breadcrumb a:hover { text-decoration: underline; }
+.nav-toggle { width: 100%; border: 0; background: none; font-family: inherit; cursor: pointer; text-align: left; }
+.nav-toggle .chevron { margin-left: auto; transition: transform 0.15s; }
+.nav-toggle[aria-expanded="true"] .chevron { transform: rotate(90deg); }
 
 .sidebar-user {
   display: flex;
@@ -535,7 +535,7 @@ a.module:hover {
   .nav { flex-direction: row; overflow-x: auto; scrollbar-width: none; }
   .nav-item { white-space: nowrap; }
   .nav-item.disabled { display: none; }
-  .nav-group { flex-direction: row; }
+  .nav-group { display: none; }
   .nav-sub { display: none; }
   .sidebar-user { padding: 0; border-top: 0; }
   .sidebar-user .avatar { display: none; }

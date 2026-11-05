@@ -1,4 +1,5 @@
-import { NavLink, Outlet, useLocation } from 'react-router-dom'
+import { useState } from 'react'
+import { NavLink, Outlet } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import { CLUB_NAME } from '../config'
 import { MODULES } from '../modules'
@@ -7,7 +8,7 @@ import Icon from './Icon'
 
 export default function Layout() {
   const { user, logout } = useAuth()
-  const { pathname } = useLocation()
+  const [openGroup, setOpenGroup] = useState('desarrollo')
 
   return (
     <div className="shell">
@@ -22,28 +23,36 @@ export default function Layout() {
             <Icon name="home" /> <span>Inicio</span>
           </NavLink>
           <p className="nav-label">Módulos</p>
-          {MODULES.map((m) =>
-            m.path ? (
-              <div key={m.key} className="nav-group">
-                <NavLink to={m.path} end={!m.children} className="nav-item">
-                  <Icon name={m.icon} /> <span>{m.name}</span>
-                </NavLink>
-                {m.children && pathname.startsWith(m.path) && (
-                  <div className="nav-sub">
-                    {m.children.map((c) => (
-                      <NavLink key={c.key} to={c.path} className="nav-item nav-subitem">
-                        <span>{c.name}</span>
-                      </NavLink>
-                    ))}
-                  </div>
-                )}
-              </div>
+          {MODULES.map((m) => {
+            if (m.children) {
+              const open = openGroup === m.key
+              return (
+                <div key={m.key} className="nav-group">
+                  <button className="nav-item nav-toggle" aria-expanded={open} onClick={() => setOpenGroup(open ? null : m.key)}>
+                    <Icon name={m.icon} /> <span>{m.name}</span> <Icon name="chevron" size={14} />
+                  </button>
+                  {open && (
+                    <div className="nav-sub">
+                      {m.children.map((c) => (
+                        <span key={c.key} className="nav-item nav-subitem disabled" title="Próximamente">
+                          <span>{c.name}</span>
+                        </span>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              )
+            }
+            return m.path ? (
+              <NavLink key={m.key} to={m.path} className="nav-item">
+                <Icon name={m.icon} /> <span>{m.name}</span>
+              </NavLink>
             ) : (
               <span key={m.key} className="nav-item disabled" title="Próximamente">
                 <Icon name={m.icon} /> <span>{m.name}</span>
               </span>
-            ),
-          )}
+            )
+          })}
         </nav>
 
         <div className="sidebar-user">

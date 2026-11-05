@@ -13,6 +13,9 @@ const PATHS = {
   search: 'M11 19a8 8 0 1 0 0-16 8 8 0 0 0 0 16M21 21l-4.35-4.35',
   logout: 'M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9',
   arrow: 'M5 12h14M13 6l6 6-6 6',
+  activity: 'M22 12h-4l-3 9L9 3l-3 9H2',
+  clipboard: 'M9 3h6v4H9zM7 5H5a1 1 0 0 0-1 1v15a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1V6a1 1 0 0 0-1-1h-2M8 12h8M8 16h5',
+  trending: 'M3 17l6-6 4 4 8-8M15 7h6v6',
   lock: 'M5 11h14v10H5zM8 11V7a4 4 0 0 1 8 0v4',
 }
 

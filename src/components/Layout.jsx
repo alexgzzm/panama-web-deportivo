@@ -1,4 +1,4 @@
-import { NavLink, Outlet } from 'react-router-dom'
+import { NavLink, Outlet, useLocation } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import { CLUB_NAME } from '../config'
 import { MODULES } from '../modules'
@@ -7,6 +7,7 @@ import Icon from './Icon'
 
 export default function Layout() {
   const { user, logout } = useAuth()
+  const { pathname } = useLocation()
 
   return (
     <div className="shell">
@@ -23,9 +24,20 @@ export default function Layout() {
           <p className="nav-label">Módulos</p>
           {MODULES.map((m) =>
             m.path ? (
-              <NavLink key={m.key} to={m.path} className="nav-item">
-                <Icon name={m.icon} /> <span>{m.name}</span>
-              </NavLink>
+              <div key={m.key} className="nav-group">
+                <NavLink to={m.path} end={!m.children} className="nav-item">
+                  <Icon name={m.icon} /> <span>{m.name}</span>
+                </NavLink>
+                {m.children && pathname.startsWith(m.path) && (
+                  <div className="nav-sub">
+                    {m.children.map((c) => (
+                      <NavLink key={c.key} to={c.path} className="nav-item nav-subitem">
+                        <span>{c.name}</span>
+                      </NavLink>
+                    ))}
+                  </div>
+                )}
+              </div>
             ) : (
               <span key={m.key} className="nav-item disabled" title="Próximamente">
                 <Icon name={m.icon} /> <span>{m.name}</span>

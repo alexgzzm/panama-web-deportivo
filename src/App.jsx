@@ -5,6 +5,10 @@ import Login from './pages/Login'
 import Home from './pages/Home'
 import Users from './pages/Users'
 import Athletes from './pages/Athletes'
+import SportsDevelopment, { SubModulePage } from './pages/SportsDevelopment'
+import { MODULES } from './modules'
+
+const DEVELOPMENT = MODULES.find((m) => m.key === 'desarrollo')
 
 function Protected({ children }) {
   const { user } = useAuth()
@@ -24,6 +28,10 @@ export default function App() {
         <Route path="/" element={<Home />} />
         <Route path="/usuarios" element={<Users />} />
         <Route path="/deportistas" element={<Athletes />} />
+        <Route path={DEVELOPMENT.path} element={<SportsDevelopment module={DEVELOPMENT} />} />
+        {DEVELOPMENT.children.map((c) => (
+          <Route key={c.key} path={c.path} element={<SubModulePage parent={DEVELOPMENT} sub={c} />} />
+        ))}
       </Route>
       <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
